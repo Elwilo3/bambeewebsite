@@ -33,13 +33,56 @@ body {
     word-wrap: break-word;
     hyphens: auto;
     white-space: pre-wrap;
+    /* Default responsive sizing - can be overridden by custom styles */
     max-width: 90vw;
     max-height: 85vh;
+    width: auto;
+    height: auto;
     /* Responsive font size - scales with viewport */
     font-size: clamp(1.5rem, 8vw, 12rem);
     padding: clamp(10px, 3vw, 40px);
     border-radius: clamp(8px, 2vw, 25px);
     transition: all 0.3s ease;
+}
+
+/* Fixed HTML Mode - Complete override for consistency */
+.text-display.custom-html-mode {
+    /* Remove ALL responsive behavior */
+    padding: 0 !important;
+    margin: 0 !important;
+    font-size: 16px !important;
+    line-height: 1.2 !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    backdrop-filter: none !important;
+    max-width: none !important;
+    max-height: none !important;
+    width: auto !important;
+    height: auto !important;
+    /* Fixed positioning for consistency */
+    position: relative;
+    z-index: 1;
+}
+
+/* Ensure all custom HTML content uses fixed sizing */
+.custom-html-mode .credits,
+.custom-html-mode .news-ticker,
+.custom-html-mode .hud-container,
+.custom-html-mode .social-post {
+    /* Completely fixed sizing - no viewport units */
+    font-size: 16px;
+    line-height: 1.2;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /* Ensure no inheritance from parent */
+    max-width: none;
+    max-height: none;
+    width: auto;
+    height: auto;
 }
 
 .text-input {
@@ -261,21 +304,6 @@ body {
 
 .style-indicator.show {
     opacity: 1;
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
-    .text-display,
-    .text-input {
-        font-size: 1.8rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .text-display,
-    .text-input {
-        font-size: 1.4rem;
-    }
 }
 
 /* Controls Panel */
@@ -629,6 +657,11 @@ body {
 /* Custom styles override */
 .custom-styles .text-display {
     transition: all 0.3s ease !important;
+    /* Allow custom width/height to override defaults */
+    max-width: var(--custom-max-width, 90vw) !important;
+    max-height: var(--custom-max-height, 85vh) !important;
+    width: var(--custom-width, auto) !important;
+    height: var(--custom-height, auto) !important;
 }
 
 /* HTML Mode specific */
@@ -723,201 +756,4 @@ body {
 @keyframes loading {
     0% { left: -100%; }
     100% { left: 100%; }
-}
-
-/* Dead Counter Specific Styles */
-.deadcounter-page .container {
-    flex-direction: column;
-    gap: 20px;
-}
-
-.deadcounter-display {
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-}
-
-.counter-label {
-    font-size: clamp(1rem, 4vw, 6rem);
-    font-weight: 300;
-    opacity: 0.8;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-}
-
-.counter-number {
-    font-size: clamp(3rem, 15vw, 25rem);
-    font-weight: 700;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
-    line-height: 1;
-}
-
-/* Apply styles to counter elements */
-.style-default .counter-label,
-.style-default .counter-number {
-    color: white;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
-}
-
-.style-neon .counter-label,
-.style-neon .counter-number {
-    color: #00ffff;
-    text-shadow: 
-        0 0 10px #00ffff,
-        0 0 20px #00ffff,
-        0 0 30px #00ffff;
-}
-
-.style-retro .counter-label,
-.style-retro .counter-number {
-    color: #ffffff;
-    font-family: 'Courier New', monospace;
-    font-weight: bold;
-    text-shadow: 3px 3px 0px #000000;
-}
-
-.style-minimal .counter-label,
-.style-minimal .counter-number {
-    color: #ffffff;
-    font-weight: 300;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-}
-
-.style-gaming .counter-label,
-.style-gaming .counter-number {
-    color: #ffffff;
-    font-weight: bold;
-    text-shadow: 
-        0 0 5px #ff0000,
-        0 0 10px #00ff00,
-        0 0 15px #0000ff;
-}
-
-.style-corporate .counter-label,
-.style-corporate .counter-number {
-    color: #2c3e50;
-    font-family: 'Arial', sans-serif;
-    font-weight: 500;
-    text-shadow: none;
-}
-
-.style-handwriting .counter-label,
-.style-handwriting .counter-number {
-    color: #2c1810;
-    font-family: 'Brush Script MT', cursive;
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
-}
-
-.style-futuristic .counter-label,
-.style-futuristic .counter-number {
-    color: #00ffff;
-    font-family: 'Orbitron', monospace;
-    font-weight: 300;
-    text-shadow: 0 0 10px #00ffff;
-}
-
-/* Edit Panel */
-.edit-panel {
-    background: rgba(0, 0, 0, 0.9);
-    border: 2px solid #ffffff;
-    border-radius: 15px;
-    padding: 20px;
-    color: white;
-    font-family: 'Roboto', sans-serif;
-    min-width: 300px;
-}
-
-.edit-section {
-    margin-bottom: 20px;
-}
-
-.edit-section h4 {
-    color: #00ffff;
-    margin-bottom: 10px;
-    font-size: 14px;
-    text-transform: uppercase;
-}
-
-.edit-section label {
-    display: block;
-    margin-bottom: 8px;
-    font-size: 14px;
-}
-
-.edit-section input {
-    margin-left: 10px;
-    padding: 6px;
-    border: 1px solid #333;
-    background: #222;
-    color: white;
-    border-radius: 4px;
-    min-width: 100px;
-}
-
-.edit-actions {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-}
-
-/* Counter background styling */
-.deadcounter-display {
-    background-color: rgba(0, 0, 0, 0.7);
-    border: 2px solid rgba(255, 255, 255, 0.4);
-    border-radius: clamp(8px, 2vw, 25px);
-    padding: clamp(20px, 4vw, 60px);
-    backdrop-filter: blur(5px);
-    transition: all 0.3s ease;
-}
-
-/* Style applications for counter background */
-.style-neon .deadcounter-display {
-    background-color: rgba(0, 0, 0, 0.8);
-    border: 3px solid #00ffff;
-    box-shadow: 
-        0 0 20px #00ffff,
-        inset 0 0 20px rgba(0, 255, 255, 0.1);
-}
-
-.style-retro .deadcounter-display {
-    background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #f9ca24);
-    background-size: 400% 400%;
-    animation: retroGradient 3s ease infinite;
-    border: 4px solid #ffffff;
-}
-
-.style-minimal .deadcounter-display {
-    background-color: transparent;
-    border: none;
-}
-
-.style-gaming .deadcounter-display {
-    background-color: rgba(0, 0, 0, 0.8);
-    border: 4px solid;
-    border-image: linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3) 1;
-    animation: rgbBorder 2s linear infinite;
-}
-
-.style-corporate .deadcounter-display {
-    background-color: rgba(255, 255, 255, 0.95);
-    border: 2px solid #2c3e50;
-}
-
-.style-handwriting .deadcounter-display {
-    background-color: rgba(255, 248, 220, 0.9);
-    border: 3px solid #8b4513;
-    transform: rotate(-1deg);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-}
-
-.style-futuristic .deadcounter-display {
-    background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(255, 0, 255, 0.1));
-    border: 2px solid #00ffff;
-    box-shadow: 
-        0 0 30px rgba(0, 255, 255, 0.3),
-        inset 0 0 30px rgba(255, 0, 255, 0.1);
-    backdrop-filter: blur(10px);
-    animation: futuristicGlow 4s ease-in-out infinite alternate;
 } 

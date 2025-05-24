@@ -64,6 +64,46 @@
             </div>
 
             <div class="controls-section">
+                <h4>Dimensions & Aspect Ratio</h4>
+                <label>Width: 
+                    <select id="width-unit">
+                        <option value="auto">Auto</option>
+                        <option value="vw">Viewport Width (vw)</option>
+                        <option value="px">Pixels (px)</option>
+                        <option value="%">Percentage (%)</option>
+                    </select>
+                    <input type="range" id="width-value" min="10" max="100" step="1" value="90" disabled><span class="value-display">Auto</span>
+                </label>
+                <label>Height: 
+                    <select id="height-unit">
+                        <option value="auto">Auto</option>
+                        <option value="vh">Viewport Height (vh)</option>
+                        <option value="px">Pixels (px)</option>
+                        <option value="%">Percentage (%)</option>
+                    </select>
+                    <input type="range" id="height-value" min="10" max="100" step="1" value="85" disabled><span class="value-display">Auto</span>
+                </label>
+                <label>Max Width: 
+                    <select id="max-width-unit">
+                        <option value="none">None</option>
+                        <option value="vw">Viewport Width (vw)</option>
+                        <option value="px">Pixels (px)</option>
+                        <option value="%">Percentage (%)</option>
+                    </select>
+                    <input type="range" id="max-width-value" min="10" max="100" step="1" value="90" disabled><span class="value-display">None</span>
+                </label>
+                <label>Max Height: 
+                    <select id="max-height-unit">
+                        <option value="none">None</option>
+                        <option value="vh">Viewport Height (vh)</option>
+                        <option value="px">Pixels (px)</option>
+                        <option value="%">Percentage (%)</option>
+                    </select>
+                    <input type="range" id="max-height-value" min="10" max="100" step="1" value="85" disabled><span class="value-display">None</span>
+                </label>
+            </div>
+
+            <div class="controls-section">
                 <h4>Background & Border</h4>
                 <label>Background Color: <input type="color" id="bg-color" value="#000000"></label>
                 <label>Opacity: <input type="range" id="bg-opacity" min="0" max="1" step="0.01" value="0.7"><span class="value-display">0.7</span></label>
@@ -265,6 +305,18 @@
                         case 'perspective': unit = 'px'; break;
                         case 'rotation': unit = '°'; break;
                         case 'scale': unit = 'x'; break;
+                        case 'width-value': 
+                            unit = document.getElementById('width-unit').value;
+                            break;
+                        case 'height-value': 
+                            unit = document.getElementById('height-unit').value;
+                            break;
+                        case 'max-width-value': 
+                            unit = document.getElementById('max-width-unit').value;
+                            break;
+                        case 'max-height-value': 
+                            unit = document.getElementById('max-height-unit').value;
+                            break;
                         default: unit = '';
                     }
                     
@@ -274,6 +326,39 @@
             
             slider.addEventListener('input', updateDisplay);
             updateDisplay(); // Initial display
+        });
+
+        // Handle dimension unit changes
+        ['width', 'height', 'max-width', 'max-height'].forEach(dimension => {
+            const unitSelect = document.getElementById(dimension + '-unit');
+            const valueSlider = document.getElementById(dimension + '-value');
+            const display = unitSelect.parentElement.querySelector('.value-display');
+            
+            unitSelect.addEventListener('change', () => {
+                const isAuto = unitSelect.value === 'auto' || unitSelect.value === 'none';
+                valueSlider.disabled = isAuto;
+                
+                if (isAuto) {
+                    display.textContent = unitSelect.value === 'auto' ? 'Auto' : 'None';
+                } else {
+                    display.textContent = valueSlider.value + unitSelect.value;
+                    
+                    // Adjust slider max values based on unit
+                    if (unitSelect.value === 'px') {
+                        valueSlider.max = '2000';
+                        valueSlider.step = '10';
+                    } else {
+                        valueSlider.max = '100';
+                        valueSlider.step = '1';
+                    }
+                }
+            });
+            
+            valueSlider.addEventListener('input', () => {
+                if (!valueSlider.disabled) {
+                    display.textContent = valueSlider.value + unitSelect.value;
+                }
+            });
         });
 
         // Template apply buttons

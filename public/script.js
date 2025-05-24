@@ -21,27 +21,27 @@ const styles = [
     { name: 'Futuristic', class: 'style-futuristic' }
 ];
 
-// Template presets
+// Template presets with FIXED sizing only
 const templates = {
     news: {
         name: "News Ticker",
         html: `<div class="news-ticker"><span class="breaking">BREAKING:</span> <span class="news-text">Your text here</span></div>`,
-        css: `.news-ticker { background: linear-gradient(45deg, #ff0000, #ffffff); padding: 10px 20px; border-radius: 5px; } .breaking { font-weight: bold; color: #ffffff; } .news-text { color: #000000; }`
+        css: `.news-ticker { background: linear-gradient(45deg, #ff0000, #ffffff); padding: 10px 20px; border-radius: 5px; font-size: 16px; line-height: 1.2; white-space: nowrap; } .breaking { font-weight: bold; color: #ffffff; } .news-text { color: #000000; }`
     },
     gaming: {
         name: "Gaming HUD",
-        html: `<div class="hud-container"><div class="hud-label">STATUS</div><div class="hud-content">Your text here</div><div class="hud-corners"></div></div>`,
-        css: `.hud-container { border: 2px solid #00ffff; background: rgba(0,0,0,0.8); padding: 15px; position: relative; } .hud-label { font-size: 0.8em; color: #00ffff; } .hud-content { font-size: 1.5em; color: #ffffff; } .hud-corners::before { content: ''; position: absolute; top: -2px; left: -2px; width: 20px; height: 20px; border-top: 4px solid #ffff00; border-left: 4px solid #ffff00; }`
+        html: `<div class="hud-container"><div class="hud-label">STATUS</div><div class="hud-content">Your text here</div></div>`,
+        css: `.hud-container { border: 2px solid #00ffff; background: rgba(0,0,0,0.8); padding: 15px; font-size: 16px; line-height: 1.2; } .hud-label { font-size: 13px; color: #00ffff; margin-bottom: 5px; } .hud-content { font-size: 24px; color: #ffffff; font-weight: bold; }`
     },
     social: {
         name: "Social Media",
         html: `<div class="social-post"><div class="avatar">👤</div><div class="content"><div class="username">@YourName</div><div class="message">Your text here</div></div></div>`,
-        css: `.social-post { display: flex; background: rgba(29,161,242,0.9); padding: 15px; border-radius: 15px; } .avatar { font-size: 2em; margin-right: 10px; } .username { font-weight: bold; color: #ffffff; } .message { color: #ffffff; margin-top: 5px; }`
+        css: `.social-post { display: flex; background: rgba(29,161,242,0.9); padding: 15px; border-radius: 15px; font-size: 16px; line-height: 1.2; align-items: flex-start; } .avatar { font-size: 32px; margin-right: 12px; } .username { font-weight: bold; color: #ffffff; font-size: 14px; margin-bottom: 4px; } .message { color: #ffffff; font-size: 16px; }`
     },
     movie: {
         name: "Movie Credits",
-        html: `<div class="credits"><div class="role">STARRING</div><div class="name">Your Name Here</div></div>`,
-        css: `.credits { text-align: center; background: linear-gradient(180deg, transparent, rgba(0,0,0,0.8), transparent); padding: 30px; } .role { font-size: 0.8em; letter-spacing: 3px; color: #cccccc; } .name { font-size: 2em; font-weight: bold; color: #ffffff; margin-top: 10px; }`
+        html: `<div class="credits"><div class="role">Streaming until beating the Ender Dragon.</div><div class="name">Current Challenge:<br>Final Hit = Gold Tool</div></div>`,
+        css: `.credits { text-align: center; display: inline-block; background: rgba(0,0,0,0.7); padding: 12px 16px; border-radius: 8px; font-size: 16px; line-height: 1.2; } .role { font-size: 11px; letter-spacing: 2px; color: #cccccc; margin: 0 0 8px 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.9); } .name { font-size: 26px; font-weight: bold; color: #ffffff; line-height: 1.0; margin: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.9); }`
     }
 };
 
@@ -55,7 +55,7 @@ let customHtmlContent = null;
 
 // Socket events
 socket.on('textUpdate', (newText) => {
-    socket.lastText = newText; // Store for reference
+    socket.lastText = newText;
     if (!customHtmlMode) {
         displayText.textContent = newText;
         if (!isEditing) {
@@ -67,17 +67,22 @@ socket.on('textUpdate', (newText) => {
 socket.on('customHtmlUpdate', (htmlData) => {
     if (htmlData && htmlData.html) {
         customHtmlContent = htmlData;
-        // AUTOMATICALLY enable HTML mode for all viewers when HTML is set globally
         customHtmlMode = true;
+        
+        // Add the fixed HTML mode class
+        displayText.classList.add('custom-html-mode');
         displayText.innerHTML = htmlData.html;
+        
         if (htmlData.css) {
             updateCustomCSS(htmlData.css);
         }
         showStyleIndicator('HTML Mode: ON (Global HTML Applied)');
     } else if (htmlData === null) {
-        // Reset HTML mode when cleared
         customHtmlMode = false;
         customHtmlContent = null;
+        
+        // Remove the fixed HTML mode class
+        displayText.classList.remove('custom-html-mode');
         clearCustomCSS();
         displayText.innerHTML = '';
         displayText.textContent = socket.lastText || "Welcome to Bambee Website!";
@@ -153,6 +158,7 @@ function toggleHtmlMode() {
     customHtmlMode = !customHtmlMode;
     
     if (customHtmlMode) {
+        displayText.classList.add('custom-html-mode');
         if (customHtmlContent) {
             displayText.innerHTML = customHtmlContent.html;
             if (customHtmlContent.css) {
@@ -161,6 +167,7 @@ function toggleHtmlMode() {
         }
         showStyleIndicator('HTML Mode: ON (H to toggle, Ctrl+R to reset)');
     } else {
+        displayText.classList.remove('custom-html-mode');
         displayText.innerHTML = '';
         displayText.textContent = socket.lastText || "Welcome to Bambee Website!";
         clearCustomCSS();
@@ -195,6 +202,7 @@ function resetToNormal() {
         
         document.body.className = 'style-default';
         displayText.removeAttribute('style');
+        displayText.classList.remove('custom-html-mode');
         displayText.innerHTML = '';
         displayText.textContent = socket.lastText || "Welcome to Bambee Website!";
         
@@ -323,13 +331,42 @@ function loadCurrentStyles() {
     
     document.getElementById('font-size').value = parseFloat(computedStyle.fontSize) / 16 || 8;
     document.getElementById('text-color').value = rgbToHex(computedStyle.color) || '#ffffff';
+    
+    // Load current dimensions if they exist
+    const currentWidth = displayText.style.width || 'auto';
+    const currentHeight = displayText.style.height || 'auto';
+    const currentMaxWidth = displayText.style.maxWidth || '90vw';
+    const currentMaxHeight = displayText.style.maxHeight || '85vh';
+    
+    // Parse and set dimension controls (simplified - you might want more robust parsing)
+    if (currentWidth !== 'auto') {
+        // Extract unit and value (basic implementation)
+        const widthMatch = currentWidth.match(/(\d+)(.*)/);
+        if (widthMatch) {
+            document.getElementById('width-value').value = widthMatch[1];
+            document.getElementById('width-unit').value = widthMatch[2];
+        }
+    }
 }
 
 function applyCustomStyles(styles) {
     document.body.classList.add('custom-styles');
     
+    // Handle dimension styles with CSS custom properties
+    const root = document.documentElement;
+    
     Object.keys(styles).forEach(property => {
-        displayText.style.setProperty(property, styles[property]);
+        if (property === 'width') {
+            root.style.setProperty('--custom-width', styles[property]);
+        } else if (property === 'height') {
+            root.style.setProperty('--custom-height', styles[property]);
+        } else if (property === 'max-width') {
+            root.style.setProperty('--custom-max-width', styles[property]);
+        } else if (property === 'max-height') {
+            root.style.setProperty('--custom-max-height', styles[property]);
+        } else {
+            displayText.style.setProperty(property, styles[property]);
+        }
     });
 }
 
@@ -342,6 +379,7 @@ function applyTemplate(templateKey) {
             css: template.css
         };
         
+        displayText.classList.add('custom-html-mode');
         displayText.innerHTML = template.html;
         updateCustomCSS(template.css);
         
@@ -404,6 +442,7 @@ document.getElementById('save-html').addEventListener('click', () => {
         customHtmlContent = { html, css };
         customHtmlMode = true;
         
+        displayText.classList.add('custom-html-mode');
         displayText.innerHTML = html;
         updateCustomCSS(css);
         
@@ -482,7 +521,7 @@ document.getElementById('import-design').addEventListener('change', (e) => {
 });
 
 function getCustomStylesFromControls() {
-    return {
+    const styles = {
         'font-size': document.getElementById('font-size').value + 'vw',
         'color': document.getElementById('text-color').value,
         'font-family': document.getElementById('font-family').value,
@@ -493,6 +532,44 @@ function getCustomStylesFromControls() {
         'padding': document.getElementById('padding').value + 'px',
         'text-align': document.getElementById('text-align').value
     };
+
+    // Handle width
+    const widthUnit = document.getElementById('width-unit').value;
+    if (widthUnit !== 'auto') {
+        const widthValue = document.getElementById('width-value').value;
+        styles['width'] = widthValue + widthUnit;
+    } else {
+        styles['width'] = 'auto';
+    }
+
+    // Handle height
+    const heightUnit = document.getElementById('height-unit').value;
+    if (heightUnit !== 'auto') {
+        const heightValue = document.getElementById('height-value').value;
+        styles['height'] = heightValue + heightUnit;
+    } else {
+        styles['height'] = 'auto';
+    }
+
+    // Handle max-width
+    const maxWidthUnit = document.getElementById('max-width-unit').value;
+    if (maxWidthUnit !== 'none') {
+        const maxWidthValue = document.getElementById('max-width-value').value;
+        styles['max-width'] = maxWidthValue + maxWidthUnit;
+    } else {
+        styles['max-width'] = 'none';
+    }
+
+    // Handle max-height
+    const maxHeightUnit = document.getElementById('max-height-unit').value;
+    if (maxHeightUnit !== 'none') {
+        const maxHeightValue = document.getElementById('max-height-value').value;
+        styles['max-height'] = maxHeightValue + maxHeightUnit;
+    } else {
+        styles['max-height'] = 'none';
+    }
+
+    return styles;
 }
 
 // Utility functions
