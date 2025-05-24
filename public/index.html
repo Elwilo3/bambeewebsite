@@ -162,7 +162,8 @@
 
             <div class="controls-section">
                 <h4>Layout & Animation</h4>
-                <label>Padding: <input type="range" id="padding" min="5" max="80" step="1" value="40"><span class="value-display">40px</span></label>
+                <label>Padding Top/Bottom: <input type="range" id="padding-vertical" min="0" max="80" step="1" value="40"><span class="value-display">40px</span></label>
+                <label>Padding Left/Right: <input type="range" id="padding-horizontal" min="0" max="120" step="1" value="40"><span class="value-display">40px</span></label>
                 <label>Text Align: 
                     <select id="text-align">
                         <option value="center">Center</option>
@@ -301,6 +302,13 @@
                 <label>Transform Scale: <input type="range" id="scale" min="0.5" max="2" step="0.1" value="1"><span class="value-display">1x</span></label>
                 <label>Perspective: <input type="range" id="perspective" min="0" max="1000" step="50" value="0"><span class="value-display">0px</span></label>
             </div>
+
+            <div class="controls-section">
+                <h4>Global Widget Settings</h4>
+                <label>Widget Scale: <input type="range" id="global-scale" min="0.3" max="2" step="0.1" value="1"><span class="value-display">1x</span></label>
+                <label>Widget Max Width: <input type="range" id="global-max-width" min="70" max="100" step="1" value="95"><span class="value-display">95vw</span></label>
+                <label>Widget Max Height: <input type="range" id="global-max-height" min="70" max="100" step="1" value="90"><span class="value-display">90vh</span></label>
+            </div>
         </div>
 
         <!-- Action Buttons -->
@@ -334,7 +342,7 @@
             });
         });
 
-        // Value display updates
+        // Value display updates - make them editable inputs
         document.querySelectorAll('input[type="range"]').forEach(slider => {
             const updateDisplay = () => {
                 const display = slider.parentElement.querySelector('.value-display');
@@ -348,10 +356,14 @@
                         case 'border-size':
                         case 'border-radius':
                         case 'box-shadow':
-                        case 'padding':
+                        case 'padding-vertical':
+                        case 'padding-horizontal':
                         case 'perspective': unit = 'px'; break;
                         case 'rotation': unit = '°'; break;
                         case 'scale': unit = 'x'; break;
+                        case 'global-scale': unit = 'x'; break;
+                        case 'global-max-width': unit = 'vw'; break;
+                        case 'global-max-height': unit = 'vh'; break;
                         case 'width-value': 
                             unit = document.getElementById('width-unit').value;
                             break;
@@ -367,7 +379,35 @@
                         default: unit = '';
                     }
                     
-                    display.textContent = value + unit;
+                    // Make it an editable input instead of just text
+                    if (!display.querySelector('input')) {
+                        const input = document.createElement('input');
+                        input.type = 'text';
+                        input.className = 'value-input';
+                        input.value = value + unit;
+                        
+                        // Update slider when input changes
+                        input.addEventListener('blur', () => {
+                            const inputValue = parseFloat(input.value);
+                            if (!isNaN(inputValue)) {
+                                slider.value = inputValue;
+                                slider.dispatchEvent(new Event('input'));
+                            } else {
+                                input.value = value + unit; // Reset if invalid
+                            }
+                        });
+                        
+                        input.addEventListener('keydown', (e) => {
+                            if (e.key === 'Enter') {
+                                input.blur();
+                            }
+                        });
+                        
+                        display.innerHTML = '';
+                        display.appendChild(input);
+                    } else {
+                        display.querySelector('input').value = value + unit;
+                    }
                 }
             };
             

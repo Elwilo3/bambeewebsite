@@ -395,11 +395,32 @@ function loadCurrentStyles() {
     document.getElementById('font-size').value = parseFloat(computedStyle.fontSize) / 16 || 8;
     document.getElementById('text-color').value = rgbToHex(computedStyle.color) || '#ffffff';
     
+    // Load global scale
+    const currentScale = document.documentElement.style.getPropertyValue('--global-widget-scale') || '1';
+    document.getElementById('global-scale').value = parseFloat(currentScale);
+    
+    // Load global max sizes
+    const currentMaxWidth = displayText.style.maxWidth || '95vw';
+    const currentMaxHeight = displayText.style.maxHeight || '90vh';
+    
+    document.getElementById('global-max-width').value = parseInt(currentMaxWidth) || 95;
+    document.getElementById('global-max-height').value = parseInt(currentMaxHeight) || 90;
+    
+    // Load padding values
+    const currentPadding = displayText.style.padding || computedStyle.padding || '30px';
+    const paddingValues = currentPadding.split(' ');
+    
+    if (paddingValues.length >= 1) {
+        const vertical = parseInt(paddingValues[0]) || 30;
+        const horizontal = paddingValues.length >= 2 ? parseInt(paddingValues[1]) || 30 : vertical;
+        
+        document.getElementById('padding-vertical').value = vertical;
+        document.getElementById('padding-horizontal').value = horizontal;
+    }
+    
     // Load current dimensions if they exist
     const currentWidth = displayText.style.width || 'auto';
     const currentHeight = displayText.style.height || 'auto';
-    const currentMaxWidth = displayText.style.maxWidth || '90vw';
-    const currentMaxHeight = displayText.style.maxHeight || '85vh';
     
     // Parse and set dimension controls (simplified - you might want more robust parsing)
     if (currentWidth !== 'auto') {
@@ -584,22 +605,44 @@ document.getElementById('import-design').addEventListener('change', (e) => {
 });
 
 function getCustomStylesFromControls() {
+    const paddingVertical = document.getElementById('padding-vertical').value;
+    const paddingHorizontal = document.getElementById('padding-horizontal').value;
+    const globalScale = document.getElementById('global-scale').value;
+    const globalMaxWidth = document.getElementById('global-max-width').value;
+    const globalMaxHeight = document.getElementById('global-max-height').value;
+    
+    // Apply global scale by actually scaling dimensions (OBS-friendly)
+    const scaledFontSize = (document.getElementById('font-size').value * globalScale);
+    const scaledPaddingV = (paddingVertical * globalScale);
+    const scaledPaddingH = (paddingHorizontal * globalScale);
+    
+    // Scale border and shadow properties relative to widget size
+    const scaledBorderSize = (document.getElementById('border-size').value * globalScale);
+    const scaledBorderRadius = (document.getElementById('border-radius').value * globalScale);
+    const scaledTextShadow = (document.getElementById('text-shadow').value * globalScale);
+    const scaledBoxShadow = (document.getElementById('box-shadow').value * globalScale);
+    
     const styles = {
-        'font-size': document.getElementById('font-size').value + 'vw',
+        'font-size': scaledFontSize + 'vw', // Scale the actual font size
         'color': document.getElementById('text-color').value,
         'font-family': document.getElementById('font-family').value,
         'font-weight': document.getElementById('font-weight').value,
         'background-color': hexToRgba(document.getElementById('bg-color').value, document.getElementById('bg-opacity').value),
-        'border': document.getElementById('border-size').value + 'px solid ' + document.getElementById('border-color').value,
-        'border-radius': document.getElementById('border-radius').value + 'px',
-        'padding': document.getElementById('padding').value + 'px',
-        'text-align': document.getElementById('text-align').value
+        'border': scaledBorderSize + 'px solid ' + document.getElementById('border-color').value, // Scale border
+        'border-radius': scaledBorderRadius + 'px', // Scale border radius
+        'padding': scaledPaddingV + 'px ' + scaledPaddingH + 'px', // Scale the actual padding
+        'text-align': document.getElementById('text-align').value,
+        'text-shadow': scaledTextShadow + 'px ' + scaledTextShadow + 'px 4px rgba(0, 0, 0, 0.9)', // Scale text shadow
+        'box-shadow': scaledBoxShadow > 0 ? `0 0 ${scaledBoxShadow}px rgba(0, 0, 0, 0.5)` : 'none', // Scale box shadow
+        // Set global max sizes (also scaled)
+        'max-width': (globalMaxWidth * globalScale) + 'vw',
+        'max-height': (globalMaxHeight * globalScale) + 'vh'
     };
 
     // Handle width
     const widthUnit = document.getElementById('width-unit').value;
     if (widthUnit !== 'auto') {
-        const widthValue = document.getElementById('width-value').value;
+        const widthValue = document.getElementById('width-value').value * globalScale;
         styles['width'] = widthValue + widthUnit;
     } else {
         styles['width'] = 'auto';
@@ -608,28 +651,39 @@ function getCustomStylesFromControls() {
     // Handle height
     const heightUnit = document.getElementById('height-unit').value;
     if (heightUnit !== 'auto') {
-        const heightValue = document.getElementById('height-value').value;
+        const heightValue = document.getElementById('height-value').value * globalScale;
         styles['height'] = heightValue + heightUnit;
     } else {
         styles['height'] = 'auto';
     }
 
-    // Handle max-width
+    // Handle max-width override
     const maxWidthUnit = document.getElementById('max-width-unit').value;
     if (maxWidthUnit !== 'none') {
-        const maxWidthValue = document.getElementById('max-width-value').value;
+        const maxWidthValue = document.getElementById('max-width-value').value * globalScale;
         styles['max-width'] = maxWidthValue + maxWidthUnit;
-    } else {
-        styles['max-width'] = 'none';
     }
 
-    // Handle max-height
+    // Handle max-height override
     const maxHeightUnit = document.getElementById('max-height-unit').value;
     if (maxHeightUnit !== 'none') {
-        const maxHeightValue = document.getElementById('max-height-value').value;
+        const maxHeightValue = document.getElementById('max-height-value').value * globalScale;
         styles['max-height'] = maxHeightValue + maxHeightUnit;
+    }
+
+    // Handle animations and transforms that should also scale
+    const rotation = document.getElementById('rotation').value;
+    if (rotation && rotation !== '0') {
+        styles['transform'] = `rotate(${rotation}deg)`;
+    }
+
+    // Handle animation
+    const animation = document.getElementById('animation').value;
+    if (animation && animation !== 'none') {
+        displayText.classList.remove('pulse', 'bounce', 'fade', 'shake');
+        displayText.classList.add(animation);
     } else {
-        styles['max-height'] = 'none';
+        displayText.classList.remove('pulse', 'bounce', 'fade', 'shake');
     }
 
     return styles;
@@ -957,4 +1011,83 @@ function deleteCustomTextStyle(styleName) {
         
         showStyleIndicator(`Text Style "${styleName}" deleted!`);
     }
-} 
+}
+
+// Value display updates - make them editable inputs
+document.querySelectorAll('input[type="range"]').forEach(slider => {
+    const updateDisplay = () => {
+        const display = slider.parentElement.querySelector('.value-display');
+        if (display) {
+            let value = slider.value;
+            let unit = '';
+            
+            switch(slider.id) {
+                case 'font-size': unit = 'vw'; break;
+                case 'text-shadow':
+                case 'border-size':
+                case 'border-radius':
+                case 'box-shadow':
+                case 'padding-vertical':
+                case 'padding-horizontal':
+                case 'perspective': unit = 'px'; break;
+                case 'rotation': unit = '°'; break;
+                case 'scale': unit = 'x'; break;
+                case 'global-scale': unit = 'x'; break;
+                case 'global-max-width': unit = 'vw'; break;
+                case 'global-max-height': unit = 'vh'; break;
+                case 'bg-opacity': unit = ''; break;
+                case 'width-value': 
+                    unit = document.getElementById('width-unit').value;
+                    break;
+                case 'height-value': 
+                    unit = document.getElementById('height-unit').value;
+                    break;
+                case 'max-width-value': 
+                    unit = document.getElementById('max-width-unit').value;
+                    break;
+                case 'max-height-value': 
+                    unit = document.getElementById('max-height-unit').value;
+                    break;
+                default: unit = '';
+            }
+            
+            // Make it an editable input instead of just text
+            if (!display.querySelector('input')) {
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.className = 'value-input';
+                input.value = value + unit;
+                
+                // Update slider when input changes
+                input.addEventListener('blur', () => {
+                    const inputValue = parseFloat(input.value);
+                    if (!isNaN(inputValue) && inputValue >= parseFloat(slider.min) && inputValue <= parseFloat(slider.max)) {
+                        slider.value = inputValue;
+                        slider.dispatchEvent(new Event('input'));
+                    } else {
+                        input.value = value + unit; // Reset if invalid
+                        showStyleIndicator('Invalid value! Must be between ' + slider.min + ' and ' + slider.max);
+                    }
+                });
+                
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        input.blur();
+                    }
+                    if (e.key === 'Escape') {
+                        input.value = value + unit;
+                        input.blur();
+                    }
+                });
+                
+                display.innerHTML = '';
+                display.appendChild(input);
+            } else {
+                display.querySelector('input').value = value + unit;
+            }
+        }
+    };
+    
+    slider.addEventListener('input', updateDisplay);
+    updateDisplay(); // Initial display
+}); 

@@ -1,30 +1,35 @@
 {
-  "currentText": "/main/Streaming until beating the Ender Dragon./main/\n/now/Current Challenge: Final hit = Gold Tool./now/",
+  "currentText": "/main/Streaming until beating the Ender/main/ \n/main/Dragon./main/\n/now/Current Challenge: Final hit = Gold Tool./now/",
   "globalStyle": {
     "styleIndex": 0,
     "customStyles": {
-      "font-size": "5.1vw",
+      "font-size": "5.5vw",
       "color": "#ffffff",
       "font-family": "Roboto",
       "font-weight": "300",
       "background-color": "rgba(0, 0, 0, 0.7)",
-      "border": "1px solid #1f1f1f",
-      "border-radius": "25px",
-      "padding": "40px",
+      "border": "1px solid #1c1c1c",
+      "border-radius": "20px",
+      "padding": "21px 21px",
       "text-align": "center",
-      "width": "auto",
-      "height": "auto",
-      "max-width": "none",
-      "max-height": "none"
+      "text-shadow": "2px 2px 4px rgba(0, 0, 0, 0.9)",
+      "box-shadow": "none",
+      "max-width": "95vw",
+      "max-height": "90vh",
+      "width": "100vw",
+      "height": "auto"
     }
   },
   "customHtmlContent": null,
   "customTextStyles": {
-    "now": {
-      "font-weight": "bold"
-    },
     "main": {
-      "font-size": "0.8em"
+      "color": "#dedede",
+      "font-weight": "lighter",
+      "font-size": "0.7em"
+    },
+    "now": {
+      "font-weight": "bold",
+      "font-size": "0.9em"
     }
   }
 }

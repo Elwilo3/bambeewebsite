@@ -12,7 +12,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 2vw;
+    padding: 0.5vw; /* Reduced from 2vw to minimize empty space */
     overflow: hidden;
 }
 
@@ -23,6 +23,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    /* Remove transform scale as it doesn't work with OBS */
+    transition: all 0.3s ease;
 }
 
 /* Base text display styles - responsive sizing */
@@ -33,14 +35,14 @@ body {
     word-wrap: break-word;
     hyphens: auto;
     white-space: pre-wrap;
-    /* Default responsive sizing - can be overridden by custom styles */
-    max-width: 90vw;
-    max-height: 85vh;
+    /* Default sizing that will be scaled by JavaScript */
+    max-width: 95vw;
+    max-height: 90vh;
     width: auto;
     height: auto;
-    /* Responsive font size - scales with viewport */
+    /* Base font size that will be scaled */
     font-size: clamp(1.5rem, 8vw, 12rem);
-    padding: clamp(10px, 3vw, 40px);
+    padding: clamp(8px, 2vw, 30px);
     border-radius: clamp(8px, 2vw, 25px);
     transition: all 0.3s ease;
 }
@@ -481,6 +483,25 @@ body {
     font-weight: 500;
 }
 
+/* Style for editable value inputs */
+.value-input {
+    background: #333 !important;
+    border: 1px solid #555 !important;
+    color: #00ffff !important;
+    padding: 2px 4px !important;
+    border-radius: 3px !important;
+    font-size: 11px !important;
+    width: 60px !important;
+    text-align: center !important;
+    font-family: 'Roboto', sans-serif !important;
+}
+
+.value-input:focus {
+    outline: none !important;
+    border-color: #00ffff !important;
+    box-shadow: 0 0 3px rgba(0, 255, 255, 0.3) !important;
+}
+
 /* Template Grid */
 .template-grid {
     display: grid;
@@ -657,9 +678,9 @@ body {
 /* Custom styles override */
 .custom-styles .text-display {
     transition: all 0.3s ease !important;
-    /* Allow custom width/height to override defaults */
-    max-width: var(--custom-max-width, 90vw) !important;
-    max-height: var(--custom-max-height, 85vh) !important;
+    /* Allow custom width/height to override defaults with larger defaults */
+    max-width: var(--custom-max-width, 95vw) !important; /* Increased from 90vw */
+    max-height: var(--custom-max-height, 90vh) !important; /* Increased from 85vh */
     width: var(--custom-width, auto) !important;
     height: var(--custom-height, auto) !important;
 }
