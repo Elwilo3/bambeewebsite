@@ -1,9 +1,24 @@
 const socket = io();
 const displayText = document.getElementById('display-text');
 const textInput = document.getElementById('text-input');
+const styleIndicator = document.getElementById('style-indicator');
 
 let isEditing = false;
 let currentPassword = null;
+
+// Style management
+const styles = [
+    { name: 'Default', class: 'style-default' },
+    { name: 'Neon Glow', class: 'style-neon' },
+    { name: 'Retro 80s', class: 'style-retro' },
+    { name: 'Minimal', class: 'style-minimal' },
+    { name: 'Gaming RGB', class: 'style-gaming' },
+    { name: 'Corporate', class: 'style-corporate' },
+    { name: 'Handwriting', class: 'style-handwriting' },
+    { name: 'Futuristic', class: 'style-futuristic' }
+];
+
+let currentStyleIndex = 0;
 
 socket.on('textUpdate', (newText) => {
     displayText.textContent = newText;
@@ -35,7 +50,36 @@ document.addEventListener('keydown', (event) => {
     if ((event.key === 'p' || event.key === 'P') && !isEditing) {
         changePassword();
     }
+    
+    // Press 'K' to cycle through styles
+    if ((event.key === 'k' || event.key === 'K') && !isEditing) {
+        cycleStyle();
+    }
 });
+
+function cycleStyle() {
+    // Remove current style class
+    document.body.classList.remove(styles[currentStyleIndex].class);
+    
+    // Move to next style
+    currentStyleIndex = (currentStyleIndex + 1) % styles.length;
+    
+    // Apply new style class
+    document.body.classList.add(styles[currentStyleIndex].class);
+    
+    // Show style indicator
+    showStyleIndicator();
+}
+
+function showStyleIndicator() {
+    styleIndicator.textContent = `Style: ${styles[currentStyleIndex].name}`;
+    styleIndicator.classList.add('show');
+    
+    // Hide after 2 seconds
+    setTimeout(() => {
+        styleIndicator.classList.remove('show');
+    }, 2000);
+}
 
 function requestPasswordAndEdit() {
     const password = prompt('Enter password to edit:');
@@ -103,4 +147,4 @@ textInput.addEventListener('blur', () => {
     }
 });
 
-console.log('Bambee Website loaded! Press "N" to edit (password required first time). Press "P" to change password.'); 
+console.log('Bambee Website loaded!\nControls:\n- N: Edit text (password required)\n- P: Change password\n- K: Change visual style\n- Enter: Save text\n- Escape: Cancel editing'); 
