@@ -53,11 +53,59 @@ let localStyleIndicator = null;
 let customStyles = {};
 let customHtmlContent = null;
 
+// Add after the templates object
+const customTextStyles = {};
+
+// Add editing state variables
+let editingStyleName = null;
+
+// Add text parsing function
+function parseCustomTextStyles(text) {
+    if (!text || customHtmlMode) return text;
+    
+    // Parse custom style markers like /stylename/text/stylename/
+    let parsedText = text.replace(/\/([a-zA-Z0-9_-]+)\/(.*?)\/\1\//g, (match, styleName, content) => {
+        if (customTextStyles[styleName]) {
+            return `<span class="custom-text-${styleName}">${content}</span>`;
+        }
+        return content; // If style doesn't exist, just return the content
+    });
+    
+    return parsedText;
+}
+
+// Add function to generate CSS for custom text styles
+function updateCustomTextStylesCSS() {
+    let styleElement = document.getElementById('custom-text-styles');
+    if (!styleElement) {
+        styleElement = document.createElement('style');
+        styleElement.id = 'custom-text-styles';
+        document.head.appendChild(styleElement);
+    }
+    
+    let css = '';
+    Object.keys(customTextStyles).forEach(styleName => {
+        const style = customTextStyles[styleName];
+        css += `.custom-text-${styleName} {\n`;
+        Object.keys(style).forEach(property => {
+            css += `  ${property}: ${style[property]};\n`;
+        });
+        css += '}\n\n';
+    });
+    
+    styleElement.textContent = css;
+}
+
 // Socket events
 socket.on('textUpdate', (newText) => {
     socket.lastText = newText;
     if (!customHtmlMode) {
-        displayText.textContent = newText;
+        const parsedText = parseCustomTextStyles(newText);
+        if (parsedText !== newText) {
+            displayText.innerHTML = parsedText;
+        } else {
+            displayText.textContent = newText;
+        }
         if (!isEditing) {
             textInput.value = newText;
         }
@@ -98,6 +146,20 @@ socket.on('globalStyleUpdate', (styleData) => {
         localStyleIndex = globalStyleIndex;
         applyStyle(globalStyleIndex, false);
         applyCustomStyles(customStyles);
+    }
+});
+
+// Add custom text styles update handler
+socket.on('customTextStylesUpdate', (styles) => {
+    Object.assign(customTextStyles, styles);
+    updateCustomTextStylesCSS();
+    
+    // Re-parse current text if not in HTML mode
+    if (!customHtmlMode && socket.lastText) {
+        const parsedText = parseCustomTextStyles(socket.lastText);
+        if (parsedText !== socket.lastText) {
+            displayText.innerHTML = parsedText;
+        }
     }
 });
 
@@ -306,6 +368,7 @@ function openControls() {
     controlsPanel.style.display = 'block';
     loadCurrentStyles();
     populateTemplates();
+    updateStylesList();
 }
 
 function closeControls() {
@@ -663,4 +726,235 @@ textInput.addEventListener('blur', () => {
     }
 });
 
-console.log('Bambee Website loaded!\nControls:\n- N: Edit text\n- P: Change password\n- K: Cycle styles\n- H: Toggle HTML mode\n- O: Advanced controls\n- Ctrl+R: Reset everything\n- Escape: Cancel/Revert'); 
+console.log('Bambee Website loaded!\nControls:\n- N: Edit text\n- P: Change password\n- K: Cycle styles\n- H: Toggle HTML mode\n- O: Advanced controls\n- Ctrl+R: Reset everything\n- Escape: Cancel/Revert');
+
+// Modify the updateStylesList function to include edit buttons
+function updateStylesList() {
+    const stylesList = document.getElementById('custom-styles-list');
+    stylesList.innerHTML = '';
+    
+    Object.keys(customTextStyles).forEach(styleName => {
+        const style = customTextStyles[styleName];
+        const item = document.createElement('div');
+        item.className = 'style-item';
+        
+        const preview = document.createElement('span');
+        preview.className = `custom-text-${styleName}`;
+        preview.textContent = `Sample Text`;
+        preview.style.fontSize = '12px';
+        
+        const editBtn = document.createElement('button');
+        editBtn.textContent = '✏️';
+        editBtn.className = 'edit-style-btn';
+        editBtn.title = 'Edit Style';
+        editBtn.onclick = () => editCustomTextStyle(styleName);
+        
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = '✕';
+        deleteBtn.className = 'delete-style-btn';
+        deleteBtn.title = 'Delete Style';
+        deleteBtn.onclick = () => deleteCustomTextStyle(styleName);
+        
+        const info = document.createElement('div');
+        info.className = 'style-info';
+        info.innerHTML = `<strong>${styleName}</strong><br><small>Usage: /${styleName}/your text/${styleName}/</small>`;
+        
+        const buttonGroup = document.createElement('div');
+        buttonGroup.className = 'style-buttons';
+        buttonGroup.appendChild(editBtn);
+        buttonGroup.appendChild(deleteBtn);
+        
+        item.appendChild(info);
+        item.appendChild(preview);
+        item.appendChild(buttonGroup);
+        
+        stylesList.appendChild(item);
+    });
+    
+    if (Object.keys(customTextStyles).length === 0) {
+        stylesList.innerHTML = '<p class="no-styles">No custom text styles yet. Create one above!</p>';
+    }
+}
+
+// Add edit function
+function editCustomTextStyle(styleName) {
+    const style = customTextStyles[styleName];
+    if (!style) return;
+    
+    // Set editing mode
+    editingStyleName = styleName;
+    
+    // Populate form with existing values
+    document.getElementById('style-name').value = styleName;
+    document.getElementById('style-name').disabled = true; // Can't change name while editing
+    
+    document.getElementById('style-color').value = style.color || '#ffffff';
+    document.getElementById('style-font-weight').value = style['font-weight'] || 'normal';
+    
+    // Parse font-size (remove 'em' suffix)
+    const fontSize = style['font-size'] ? parseFloat(style['font-size'].replace('em', '')) : 1;
+    document.getElementById('style-font-size-custom').value = fontSize;
+    
+    document.getElementById('style-font-style').value = style['font-style'] || 'normal';
+    document.getElementById('style-text-decoration').value = style['text-decoration'] || 'none';
+    document.getElementById('style-bg-color').value = style['background-color'] || '#000000';
+    
+    // Parse text-shadow (extract first number)
+    const textShadow = style['text-shadow'] ? parseInt(style['text-shadow'].split('px')[0]) : 0;
+    document.getElementById('style-text-shadow').value = textShadow;
+    
+    // Update button text and add cancel button
+    const addButton = document.getElementById('add-custom-style');
+    addButton.textContent = '💾 Update Style';
+    addButton.className = 'control-btn global';
+    
+    // Add cancel button if it doesn't exist
+    let cancelButton = document.getElementById('cancel-edit-style');
+    if (!cancelButton) {
+        cancelButton = document.createElement('button');
+        cancelButton.id = 'cancel-edit-style';
+        cancelButton.textContent = '❌ Cancel';
+        cancelButton.className = 'control-btn reset';
+        cancelButton.onclick = cancelEditCustomTextStyle;
+        addButton.parentNode.appendChild(cancelButton);
+    }
+    
+    // Update value displays
+    document.getElementById('style-font-size-custom').dispatchEvent(new Event('input'));
+    document.getElementById('style-text-shadow').dispatchEvent(new Event('input'));
+    
+    showStyleIndicator(`Editing style: ${styleName}`);
+}
+
+function cancelEditCustomTextStyle() {
+    editingStyleName = null;
+    
+    // Re-enable name field and clear form
+    document.getElementById('style-name').disabled = false;
+    clearStyleForm();
+    
+    // Reset button text
+    const addButton = document.getElementById('add-custom-style');
+    addButton.textContent = '➕ Create Style';
+    addButton.className = 'control-btn';
+    
+    // Remove cancel button
+    const cancelButton = document.getElementById('cancel-edit-style');
+    if (cancelButton) {
+        cancelButton.remove();
+    }
+    
+    showStyleIndicator('Edit cancelled');
+}
+
+// Modify addCustomTextStyle to handle both create and update
+function addCustomTextStyle() {
+    const styleName = document.getElementById('style-name').value.trim();
+    const color = document.getElementById('style-color').value;
+    const fontWeight = document.getElementById('style-font-weight').value;
+    const fontSize = document.getElementById('style-font-size-custom').value;
+    const fontStyle = document.getElementById('style-font-style').value;
+    const textDecoration = document.getElementById('style-text-decoration').value;
+    const backgroundColor = document.getElementById('style-bg-color').value;
+    const textShadow = document.getElementById('style-text-shadow').value;
+    
+    if (!styleName || !styleName.match(/^[a-zA-Z0-9_-]+$/)) {
+        alert('Style name must contain only letters, numbers, underscores, and hyphens!');
+        return;
+    }
+    
+    // Check if name already exists (and we're not editing)
+    if (!editingStyleName && customTextStyles[styleName]) {
+        alert('Style name already exists! Use the edit button to modify it.');
+        return;
+    }
+    
+    const newStyle = {};
+    if (color !== '#ffffff') newStyle.color = color;
+    if (fontWeight !== 'normal') newStyle['font-weight'] = fontWeight;
+    if (fontSize !== '1') newStyle['font-size'] = fontSize + 'em';
+    if (fontStyle !== 'normal') newStyle['font-style'] = fontStyle;
+    if (textDecoration !== 'none') newStyle['text-decoration'] = textDecoration;
+    if (backgroundColor !== '#000000') newStyle['background-color'] = backgroundColor;
+    if (textShadow !== '0') newStyle['text-shadow'] = textShadow + 'px ' + textShadow + 'px 4px rgba(0,0,0,0.5)';
+    
+    // If editing, remove the old style first (in case we're changing properties)
+    if (editingStyleName) {
+        // If the name changed, we need to remove the old one
+        if (editingStyleName !== styleName) {
+            delete customTextStyles[editingStyleName];
+        }
+    }
+    
+    customTextStyles[styleName] = newStyle;
+    updateCustomTextStylesCSS();
+    updateStylesList();
+    
+    // Send to server if we have password
+    if (currentPassword) {
+        socket.emit('updateCustomTextStyles', {
+            styles: customTextStyles,
+            password: currentPassword
+        });
+    }
+    
+    const action = editingStyleName ? 'updated' : 'created';
+    showStyleIndicator(`Text Style "${styleName}" ${action}!`);
+    
+    // Reset editing mode
+    if (editingStyleName) {
+        cancelEditCustomTextStyle();
+    } else {
+        clearStyleForm();
+    }
+}
+
+// Modify clearStyleForm to handle editing mode
+function clearStyleForm() {
+    if (!editingStyleName) {
+        document.getElementById('style-name').value = '';
+    }
+    document.getElementById('style-color').value = '#ffffff';
+    document.getElementById('style-font-weight').value = 'normal';
+    document.getElementById('style-font-size-custom').value = '1';
+    document.getElementById('style-font-style').value = 'normal';
+    document.getElementById('style-text-decoration').value = 'none';
+    document.getElementById('style-bg-color').value = '#000000';
+    document.getElementById('style-text-shadow').value = '0';
+    
+    // Update displays
+    document.getElementById('style-font-size-custom').dispatchEvent(new Event('input'));
+    document.getElementById('style-text-shadow').dispatchEvent(new Event('input'));
+}
+
+// Add event listener for creating custom text styles
+document.getElementById('add-custom-style').addEventListener('click', addCustomTextStyle);
+
+// Update custom font size display
+document.getElementById('style-font-size-custom').addEventListener('input', (e) => {
+    const display = e.target.parentElement.querySelector('.value-display');
+    display.textContent = e.target.value + 'em';
+});
+
+// Update custom text shadow display
+document.getElementById('style-text-shadow').addEventListener('input', (e) => {
+    const display = e.target.parentElement.querySelector('.value-display');
+    display.textContent = e.target.value + 'px';
+});
+
+function deleteCustomTextStyle(styleName) {
+    if (confirm(`Delete text style "${styleName}"?`)) {
+        delete customTextStyles[styleName];
+        updateCustomTextStylesCSS();
+        updateStylesList();
+        
+        if (currentPassword) {
+            socket.emit('updateCustomTextStyles', {
+                styles: customTextStyles,
+                password: currentPassword
+            });
+        }
+        
+        showStyleIndicator(`Text Style "${styleName}" deleted!`);
+    }
+} 

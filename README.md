@@ -1,16 +1,8 @@
 # Bambee Website - Ultimate Streaming Customization Platform
 
-A real-time collaborative text editing website with greenscreen background, now featuring **extensive customization capabilities** including HTML/CSS editing, templates, advanced styling controls, and **persistent data storage**.
+A real-time collaborative text editing website with greenscreen background, now featuring **extensive customization capabilities** including HTML/CSS editing, templates, and advanced styling controls.
 
-## 🎯 NEW: Zero Reset Guarantee
-
-- **💾 Persistent Storage**: All text, styles, and HTML content automatically saved to file
-- **🔄 Survives Server Restarts**: Your customizations never reset or disappear
-- **⚡ Auto-Save**: Every change instantly saved - no manual saving required
-- **🛡️ Crash Protection**: Data preserved even during unexpected shutdowns
-- **📂 File-Based**: Everything stored in `bambee-data.json` for easy backup
-
-## ✨ Advanced Features
+## ✨ NEW Advanced Features
 
 - **🎨 Custom HTML/CSS Editor**: Write your own HTML and CSS code with live preview
 - **📐 Professional Templates**: News ticker, gaming HUD, social media, movie credits, and more
@@ -44,7 +36,6 @@ A real-time collaborative text editing website with greenscreen background, now 
 
 #### 🎨 Styles Tab
 - **Text Styling**: Font size, family, color, weight, shadow
-- **Dimensions & Aspect Ratio**: Width, height, max-width, max-height with multiple units (vw, vh, px, %)
 - **Background & Border**: Colors, opacity, borders, shadows, radius
 - **Layout & Animation**: Padding, alignment, rotation, animations (pulse, bounce, fade, shake)
 
@@ -66,14 +57,6 @@ A real-time collaborative text editing website with greenscreen background, now 
 
 ## 🎯 Template Examples
 
-### Movie Credits Template (Gaming Stream Style)
-```html
-<div class="credits">
-    <div class="role">Streaming until beating the Ender Dragon.</div>
-    <div class="name">Current Challenge:<br>Final hit = Gold Tool.</div>
-</div>
-```
-
 ### News Ticker Template
 ```html
 <div class="news-ticker">
@@ -87,6 +70,7 @@ A real-time collaborative text editing website with greenscreen background, now 
 <div class="hud-container">
   <div class="hud-label">STATUS</div>
   <div class="hud-content">Your text here</div>
+  <div class="hud-corners"></div>
 </div>
 ```
 
@@ -115,10 +99,7 @@ A real-time collaborative text editing website with greenscreen background, now 
 
 3. **Access the website:**
    - Main page: `http://localhost:3000`
-
-4. **Your data is automatically saved!** 
-   - All changes persist in `bambee-data.json`
-   - No more lost customizations or random resets
+   - Dead counter: `http://localhost:3000/deadcounter`
 
 ## 📺 OBS Studio Setup
 
@@ -132,11 +113,10 @@ A real-time collaborative text editing website with greenscreen background, now 
    - Similarity: 400-600
 
 ### Advanced Setup Tips
-- **Consistent Display**: Your styles now persist even if OBS restarts
-- **Multiple Sources**: Use the same URL in multiple scenes - styles stay synchronized
-- **Custom Dimensions**: Use the aspect ratio controls for perfect fit in any scene
-- **Template Switching**: Quickly change styles during stream without losing progress
-- **HTML Mode**: Create complex layouts with custom code that never disappears
+- **Multiple Sources**: Use both main page and deadcounter simultaneously
+- **Custom Styles**: Create unique looks for different scenes
+- **Template Switching**: Quickly change styles during stream
+- **HTML Mode**: Create complex layouts with custom code
 
 ## 🎨 Customization Workflow
 
@@ -144,9 +124,8 @@ A real-time collaborative text editing website with greenscreen background, now 
 1. Press **O** to open controls
 2. Go to **Styles** tab
 3. Adjust sliders and dropdowns
-4. Set custom dimensions with **Dimensions & Aspect Ratio** controls
-5. Click **👁️ Apply Locally** to preview
-6. Click **🌍 Apply Globally** to share with viewers
+4. Click **👁️ Apply Locally** to preview
+5. Click **🌍 Apply Globally** to share with viewers
 
 ### HTML/CSS Custom Design
 1. Press **H** to enable HTML mode
@@ -160,7 +139,7 @@ A real-time collaborative text editing website with greenscreen background, now 
 1. Press **O** to open controls
 2. Go to **Templates** tab
 3. Preview templates in the grid
-4. Click **Apply** on your favorite (like Movie Credits for gaming streams)
+4. Click **Apply** on your favorite
 5. Customize further in other tabs
 
 ### Import/Export Designs
@@ -185,37 +164,25 @@ A real-time collaborative text editing website with greenscreen background, now 
 5. Deploy and get your public URL!
 6. Share the link with your community!
 
-**Note:** Your deployed version will also have persistent storage - customizations survive server sleep/wake cycles!
-
 ## 💡 Pro Tips
 
-- **No More Worries**: Your text and styles automatically persist - customize with confidence!
-- **Backup Your Data**: The `bambee-data.json` file contains everything - back it up periodically
 - **Test Locally First**: Use local preview before going global
-- **Multiple Browser Sources**: Use different aspect ratios for different content types
+- **Save Your Designs**: Export frequently used styles as JSON files
+- **Multiple Browser Sources**: Use different pages for different content types
 - **Keyboard Shortcuts**: Learn the hotkeys for faster workflow
 - **Reset Anytime**: Ctrl+R instantly returns to normal if something breaks
-- **Custom Dimensions**: Use the new aspect ratio controls for perfect OBS integration
 
 ## 🎭 Use Cases
 
-- **Gaming Streams**: Persistent death counters, status displays, challenge tracking
-- **News/Talk Shows**: Professional news tickers and lower thirds that never reset
-- **Social Media**: Tweet displays, follower notifications with consistent styling
+- **Gaming Streams**: Death counters, status displays, notifications
+- **News/Talk Shows**: Professional news tickers and lower thirds
+- **Social Media**: Tweet displays, follower notifications
 - **Creative Content**: Movie-style credits, artistic text displays
-- **Educational**: Clean, readable text for tutorials with saved formatting
-- **Business**: Corporate-style information displays with reliable persistence
+- **Educational**: Clean, readable text for tutorials
+- **Business**: Corporate-style information displays
 
-Perfect for streamers who want **total creative control** with **zero reset anxiety**! 🎬✨
-
-## 🔧 Data Storage
-
-- **File Location**: `bambee-data.json` in your project root
-- **Auto-Created**: File created automatically on first run
-- **Format**: Human-readable JSON for easy inspection/backup
-- **Sync**: Changes instantly saved across all connected clients
-- **Recovery**: Graceful fallback to defaults if file becomes corrupted
+Perfect for streamers who want **total creative control** over their text overlays! 🎬✨
 
 ---
 
-**Your customizations are now permanent - stream with confidence!** 🚀 
+**Dead Counter Page**: Access `/deadcounter` for a separate counter with the same customization power! 

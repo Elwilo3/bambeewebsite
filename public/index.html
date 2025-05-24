@@ -36,6 +36,53 @@
 
         <!-- Styles Tab -->
         <div class="tab-content active" data-tab="styles">
+            <!-- Add Custom Text Styles section at the top -->
+            <div class="controls-section">
+                <h4>Custom Text Styles</h4>
+                <div class="text-style-creator">
+                    <div class="style-form">
+                        <label>Style Name: <input type="text" id="style-name" placeholder="e.g., bold, red, highlight" maxlength="20"></label>
+                        <label>Color: <input type="color" id="style-color" value="#ffffff"></label>
+                        <label>Font Weight: 
+                            <select id="style-font-weight">
+                                <option value="normal">Normal</option>
+                                <option value="bold">Bold</option>
+                                <option value="lighter">Lighter</option>
+                                <option value="bolder">Bolder</option>
+                            </select>
+                        </label>
+                        <label>Font Size: <input type="range" id="style-font-size-custom" min="0.5" max="3" step="0.1" value="1"><span class="value-display">1em</span></label>
+                        <label>Font Style: 
+                            <select id="style-font-style">
+                                <option value="normal">Normal</option>
+                                <option value="italic">Italic</option>
+                                <option value="oblique">Oblique</option>
+                            </select>
+                        </label>
+                        <label>Text Decoration: 
+                            <select id="style-text-decoration">
+                                <option value="none">None</option>
+                                <option value="underline">Underline</option>
+                                <option value="line-through">Strike-through</option>
+                                <option value="overline">Overline</option>
+                            </select>
+                        </label>
+                        <label>Background: <input type="color" id="style-bg-color" value="#000000"></label>
+                        <label>Text Shadow: <input type="range" id="style-text-shadow" min="0" max="10" step="1" value="0"><span class="value-display">0px</span></label>
+                    </div>
+                    <button id="add-custom-style" class="control-btn">➕ Create Style</button>
+                </div>
+                
+                <div class="custom-styles-list" id="custom-styles-list">
+                    <p class="no-styles">No custom text styles yet. Create one above!</p>
+                </div>
+                
+                <div class="style-help">
+                    <small>💡 Use your styles like this: <code>/stylename/your text/stylename/</code></small>
+                    <br><small>Example: <code>/bold/Hello/bold/ /red/World/red/</code></small>
+                </div>
+            </div>
+
             <div class="controls-section">
                 <h4>Text Styling</h4>
                 <label>Font Size: <input type="range" id="font-size" min="0.5" max="20" step="0.1" value="8"><span class="value-display">8vw</span></label>

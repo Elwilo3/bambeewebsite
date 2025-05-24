@@ -15,7 +15,8 @@ const DATA_FILE = path.join(__dirname, 'bambee-data.json');
 const defaultData = {
     currentText: "Welcome to Bambee Website! Press 'n' to edit this text.",
     globalStyle: { styleIndex: 0, customStyles: {} },
-    customHtmlContent: null
+    customHtmlContent: null,
+    customTextStyles: {}
 };
 
 // Current data (loaded from file)
@@ -62,6 +63,7 @@ io.on('connection', (socket) => {
   socket.emit('textUpdate', appData.currentText);
   socket.emit('globalStyleUpdate', appData.globalStyle);
   socket.emit('customHtmlUpdate', appData.customHtmlContent);
+  socket.emit('customTextStylesUpdate', appData.customTextStyles || {});
   
   // Handle password verification for editing
   socket.on('verifyPassword', (password, callback) => {
@@ -116,7 +118,22 @@ io.on('connection', (socket) => {
     }
   });
 
-  // Handle reset to normal
+  // Handle custom text styles updates
+  socket.on('updateCustomTextStyles', async (data) => {
+    const { styles, password } = data;
+    
+    if (password === EDIT_PASSWORD) {
+      appData.customTextStyles = styles;
+      await saveData(); // Save to file
+      // Broadcast to all connected clients
+      io.emit('customTextStylesUpdate', appData.customTextStyles);
+      console.log('Custom text styles updated');
+    } else {
+      console.log('Custom text styles update rejected: Invalid password');
+    }
+  });
+
+  // Handle reset to normal - include customTextStyles
   socket.on('resetToNormal', async (data) => {
     const { password } = data;
     
@@ -124,11 +141,13 @@ io.on('connection', (socket) => {
       // Reset everything to defaults
       appData.globalStyle = { styleIndex: 0, customStyles: {} };
       appData.customHtmlContent = null;
+      appData.customTextStyles = {};
       await saveData(); // Save to file
       
       // Broadcast reset to all clients
       io.emit('globalStyleUpdate', appData.globalStyle);
       io.emit('customHtmlUpdate', null);
+      io.emit('customTextStylesUpdate', {});
       io.emit('textUpdate', appData.currentText);
       
       console.log('Reset to normal - all customizations cleared');

@@ -756,4 +756,151 @@ body {
 @keyframes loading {
     0% { left: -100%; }
     100% { left: 100%; }
+}
+
+/* Custom Text Styles Section */
+.text-style-creator {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(0, 255, 255, 0.2);
+    border-radius: 6px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.style-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.style-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-size: 11px;
+}
+
+.style-form input[type="text"] {
+    padding: 6px 8px;
+    border: 1px solid #333;
+    background: #222;
+    color: white;
+    border-radius: 4px;
+    font-size: 11px;
+}
+
+.custom-styles-list {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.style-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px;
+    margin-bottom: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    gap: 10px;
+}
+
+.style-item:last-child {
+    margin-bottom: 0;
+}
+
+.style-info {
+    flex: 1;
+    font-size: 11px;
+}
+
+.style-info strong {
+    color: #00ffff;
+}
+
+.style-info small {
+    color: #aaa;
+}
+
+.style-buttons {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.edit-style-btn {
+    background: rgba(0, 255, 255, 0.1);
+    border: 1px solid #00ffff;
+    color: #00ffff;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.edit-style-btn:hover {
+    background: rgba(0, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+
+.delete-style-btn {
+    background: rgba(255, 68, 68, 0.1);
+    border: 1px solid #ff4444;
+    color: #ff4444;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.delete-style-btn:hover {
+    background: rgba(255, 68, 68, 0.2);
+    transform: scale(1.1);
+}
+
+/* Style for disabled name input during editing */
+#style-name:disabled {
+    background: #333 !important;
+    color: #999 !important;
+    cursor: not-allowed;
+}
+
+.style-help {
+    margin-top: 10px;
+    padding: 8px;
+    background: rgba(0, 255, 255, 0.05);
+    border-left: 3px solid #00ffff;
+    border-radius: 0 4px 4px 0;
+}
+
+.style-help code {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-family: 'Courier New', monospace;
+    color: #00ffff;
+    font-size: 10px;
+}
+
+.no-styles {
+    text-align: center;
+    color: #666;
+    font-style: italic;
+    margin: 20px 0;
+    font-size: 11px;
 } 
