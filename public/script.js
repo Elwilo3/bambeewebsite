@@ -55,6 +55,10 @@ let customHtmlContent = null;
 
 // Socket events
 socket.on('textUpdate', (newText) => {
+    // Store the last text for potential use
+    socket.lastText = newText;
+    
+    // Only update text display if not in custom HTML mode
     if (!customHtmlMode) {
         displayText.textContent = newText;
         if (!isEditing) {
@@ -66,12 +70,19 @@ socket.on('textUpdate', (newText) => {
 socket.on('customHtmlUpdate', (htmlData) => {
     if (htmlData && htmlData.html) {
         customHtmlContent = htmlData;
-        if (customHtmlMode) {
-            displayText.innerHTML = htmlData.html;
-            if (htmlData.css) {
-                updateCustomCSS(htmlData.css);
-            }
+        // Automatically enable HTML mode for all clients when custom HTML is received
+        customHtmlMode = true;
+        displayText.innerHTML = htmlData.html;
+        if (htmlData.css) {
+            updateCustomCSS(htmlData.css);
         }
+    } else if (htmlData === null) {
+        // Reset to normal text mode when HTML is cleared
+        customHtmlMode = false;
+        customHtmlContent = null;
+        clearCustomCSS();
+        displayText.innerHTML = '';
+        displayText.textContent = socket.lastText || "Welcome to Bambee Website!";
     }
 });
 
@@ -107,7 +118,7 @@ document.addEventListener('keydown', (event) => {
     
     if (event.key === 'Escape') {
         if (isEditing) {
-            cancelEditing();
+        cancelEditing();
         } else if (controlsOpen) {
             closeControls();
         } else if (isLocalMode) {
@@ -540,11 +551,11 @@ function startEditing() {
         document.getElementById('css-editor').value = customHtmlContent?.css || '';
         document.querySelector('[data-tab="html"]').click();
     } else {
-        isEditing = true;
-        displayText.style.display = 'none';
-        textInput.style.display = 'block';
-        textInput.focus();
-        textInput.select();
+    isEditing = true;
+    displayText.style.display = 'none';
+    textInput.style.display = 'block';
+    textInput.focus();
+    textInput.select();
     }
 }
 
