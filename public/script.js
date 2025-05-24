@@ -55,6 +55,7 @@ let customHtmlContent = null;
 
 // Socket events
 socket.on('textUpdate', (newText) => {
+    socket.lastText = newText; // Store for reference
     if (!customHtmlMode) {
         displayText.textContent = newText;
         if (!isEditing) {
@@ -66,12 +67,21 @@ socket.on('textUpdate', (newText) => {
 socket.on('customHtmlUpdate', (htmlData) => {
     if (htmlData && htmlData.html) {
         customHtmlContent = htmlData;
-        if (customHtmlMode) {
-            displayText.innerHTML = htmlData.html;
-            if (htmlData.css) {
-                updateCustomCSS(htmlData.css);
-            }
+        // AUTOMATICALLY enable HTML mode for all viewers when HTML is set globally
+        customHtmlMode = true;
+        displayText.innerHTML = htmlData.html;
+        if (htmlData.css) {
+            updateCustomCSS(htmlData.css);
         }
+        showStyleIndicator('HTML Mode: ON (Global HTML Applied)');
+    } else if (htmlData === null) {
+        // Reset HTML mode when cleared
+        customHtmlMode = false;
+        customHtmlContent = null;
+        clearCustomCSS();
+        displayText.innerHTML = '';
+        displayText.textContent = socket.lastText || "Welcome to Bambee Website!";
+        showStyleIndicator('HTML Mode: OFF (Reset)');
     }
 });
 
@@ -107,7 +117,7 @@ document.addEventListener('keydown', (event) => {
     
     if (event.key === 'Escape') {
         if (isEditing) {
-            cancelEditing();
+        cancelEditing();
         } else if (controlsOpen) {
             closeControls();
         } else if (isLocalMode) {
@@ -540,11 +550,11 @@ function startEditing() {
         document.getElementById('css-editor').value = customHtmlContent?.css || '';
         document.querySelector('[data-tab="html"]').click();
     } else {
-        isEditing = true;
-        displayText.style.display = 'none';
-        textInput.style.display = 'block';
-        textInput.focus();
-        textInput.select();
+    isEditing = true;
+    displayText.style.display = 'none';
+    textInput.style.display = 'block';
+    textInput.focus();
+    textInput.select();
     }
 }
 
