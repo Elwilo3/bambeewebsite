@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bambee Website</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Orbitron:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Orbitron:wght@300;400;700&family=Courier+New&family=Arial&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="style-default">
@@ -19,7 +19,293 @@
         Style: Default
     </div>
 
+    <!-- Enhanced Controls Panel -->
+    <div id="controls-panel" class="controls-panel">
+        <div class="controls-header">
+            <h3>Bambee Customization Studio</h3>
+            <button id="close-controls" class="close-btn">×</button>
+        </div>
+        
+        <!-- Tab Navigation -->
+        <div class="tab-nav">
+            <button class="tab-btn active" data-tab="styles">Styles</button>
+            <button class="tab-btn" data-tab="html">HTML/CSS</button>
+            <button class="tab-btn" data-tab="templates">Templates</button>
+            <button class="tab-btn" data-tab="advanced">Advanced</button>
+        </div>
+
+        <!-- Styles Tab -->
+        <div class="tab-content active" data-tab="styles">
+            <div class="controls-section">
+                <h4>Text Styling</h4>
+                <label>Font Size: <input type="range" id="font-size" min="0.5" max="20" step="0.1" value="8"><span class="value-display">8vw</span></label>
+                <label>Font Family: 
+                    <select id="font-family">
+                        <option value="Roboto">Roboto</option>
+                        <option value="Orbitron">Orbitron</option>
+                        <option value="'Courier New'">Courier New</option>
+                        <option value="Arial">Arial</option>
+                        <option value="'Brush Script MT'">Brush Script MT</option>
+                        <option value="'Comic Sans MS'">Comic Sans MS</option>
+                        <option value="'Times New Roman'">Times New Roman</option>
+                    </select>
+                </label>
+                <label>Text Color: <input type="color" id="text-color" value="#ffffff"></label>
+                <label>Font Weight: 
+                    <select id="font-weight">
+                        <option value="300">Light</option>
+                        <option value="400">Normal</option>
+                        <option value="500">Medium</option>
+                        <option value="700">Bold</option>
+                        <option value="900">Extra Bold</option>
+                    </select>
+                </label>
+                <label>Text Shadow: <input type="range" id="text-shadow" min="0" max="20" step="1" value="2"><span class="value-display">2px</span></label>
+            </div>
+
+            <div class="controls-section">
+                <h4>Background & Border</h4>
+                <label>Background Color: <input type="color" id="bg-color" value="#000000"></label>
+                <label>Opacity: <input type="range" id="bg-opacity" min="0" max="1" step="0.01" value="0.7"><span class="value-display">0.7</span></label>
+                <label>Border Size: <input type="range" id="border-size" min="0" max="10" step="1" value="2"><span class="value-display">2px</span></label>
+                <label>Border Color: <input type="color" id="border-color" value="#ffffff"></label>
+                <label>Border Radius: <input type="range" id="border-radius" min="0" max="50" step="1" value="25"><span class="value-display">25px</span></label>
+                <label>Box Shadow: <input type="range" id="box-shadow" min="0" max="30" step="1" value="0"><span class="value-display">0px</span></label>
+            </div>
+
+            <div class="controls-section">
+                <h4>Layout & Animation</h4>
+                <label>Padding: <input type="range" id="padding" min="5" max="80" step="1" value="40"><span class="value-display">40px</span></label>
+                <label>Text Align: 
+                    <select id="text-align">
+                        <option value="center">Center</option>
+                        <option value="left">Left</option>
+                        <option value="right">Right</option>
+                    </select>
+                </label>
+                <label>Rotation: <input type="range" id="rotation" min="-15" max="15" step="1" value="0"><span class="value-display">0°</span></label>
+                <label>Animation: 
+                    <select id="animation">
+                        <option value="none">None</option>
+                        <option value="pulse">Pulse</option>
+                        <option value="bounce">Bounce</option>
+                        <option value="fade">Fade</option>
+                        <option value="shake">Shake</option>
+                    </select>
+                </label>
+            </div>
+        </div>
+
+        <!-- HTML/CSS Tab -->
+        <div class="tab-content" data-tab="html">
+            <div class="controls-section">
+                <h4>Custom HTML</h4>
+                <textarea id="html-editor" placeholder="Enter your custom HTML here..." rows="8"></textarea>
+                <div class="editor-help">
+                    <small>💡 Tips: Use variables like {TEXT} for dynamic content</small>
+                </div>
+            </div>
+            
+            <div class="controls-section">
+                <h4>Custom CSS</h4>
+                <textarea id="css-editor" placeholder="Enter your custom CSS here..." rows="6"></textarea>
+                <div class="editor-help">
+                    <small>💡 Style classes: .text-display, .container, .custom-element</small>
+                </div>
+            </div>
+
+            <div class="controls-section">
+                <h4>HTML Templates</h4>
+                <select id="template-select">
+                    <option value="">Choose Template...</option>
+                </select>
+                <div class="template-preview" id="template-preview"></div>
+            </div>
+        </div>
+
+        <!-- Templates Tab -->
+        <div class="tab-content" data-tab="templates">
+            <div class="template-grid">
+                <div class="template-card" data-template="news">
+                    <div class="template-preview">
+                        <div style="background: linear-gradient(45deg, #ff0000, #ffffff); padding: 5px; border-radius: 3px; font-size: 10px;">
+                            <span style="font-weight: bold; color: white;">BREAKING:</span> 
+                            <span style="color: black;">News Text</span>
+                        </div>
+                    </div>
+                    <h5>News Ticker</h5>
+                    <p>Breaking news style with scrolling effect</p>
+                    <button class="apply-template" data-template="news">Apply</button>
+                </div>
+
+                <div class="template-card" data-template="gaming">
+                    <div class="template-preview">
+                        <div style="border: 1px solid #00ffff; background: rgba(0,0,0,0.8); padding: 5px; font-size: 8px; color: #00ffff;">
+                            <div>STATUS</div>
+                            <div style="color: white; font-size: 10px;">Game HUD</div>
+                        </div>
+                    </div>
+                    <h5>Gaming HUD</h5>
+                    <p>Futuristic gaming interface style</p>
+                    <button class="apply-template" data-template="gaming">Apply</button>
+                </div>
+
+                <div class="template-card" data-template="social">
+                    <div class="template-preview">
+                        <div style="background: rgba(29,161,242,0.9); padding: 5px; border-radius: 8px; font-size: 8px; color: white;">
+                            <div style="display: flex; align-items: center; gap: 5px;">
+                                <span>👤</span>
+                                <div>
+                                    <div style="font-weight: bold;">@User</div>
+                                    <div>Social post</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <h5>Social Media</h5>
+                    <p>Twitter/social media post style</p>
+                    <button class="apply-template" data-template="social">Apply</button>
+                </div>
+
+                <div class="template-card" data-template="movie">
+                    <div class="template-preview">
+                        <div style="background: linear-gradient(180deg, transparent, rgba(0,0,0,0.8), transparent); padding: 10px; text-align: center; font-size: 8px; color: white;">
+                            <div style="letter-spacing: 1px; color: #ccc;">STARRING</div>
+                            <div style="font-weight: bold; margin-top: 2px;">Actor Name</div>
+                        </div>
+                    </div>
+                    <h5>Movie Credits</h5>
+                    <p>Cinematic credits style</p>
+                    <button class="apply-template" data-template="movie">Apply</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Advanced Tab -->
+        <div class="tab-content" data-tab="advanced">
+            <div class="controls-section">
+                <h4>Import/Export</h4>
+                <div class="file-controls">
+                    <button id="export-design" class="control-btn">📥 Export Design</button>
+                    <label for="import-design" class="control-btn">📤 Import Design
+                        <input type="file" id="import-design" accept=".json" style="display: none;">
+                    </label>
+                </div>
+            </div>
+
+            <div class="controls-section">
+                <h4>Quick Actions</h4>
+                <button id="reset-all" class="control-btn reset">🔄 Reset Everything</button>
+                <button id="copy-html" class="control-btn">📋 Copy HTML</button>
+                <button id="copy-css" class="control-btn">📋 Copy CSS</button>
+            </div>
+
+            <div class="controls-section">
+                <h4>Advanced CSS</h4>
+                <label>Backdrop Filter: 
+                    <select id="backdrop-filter">
+                        <option value="none">None</option>
+                        <option value="blur(5px)">Blur</option>
+                        <option value="brightness(1.2)">Bright</option>
+                        <option value="contrast(1.5)">Contrast</option>
+                        <option value="sepia(1)">Sepia</option>
+                    </select>
+                </label>
+                <label>Transform Scale: <input type="range" id="scale" min="0.5" max="2" step="0.1" value="1"><span class="value-display">1x</span></label>
+                <label>Perspective: <input type="range" id="perspective" min="0" max="1000" step="50" value="0"><span class="value-display">0px</span></label>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="controls-actions">
+            <button id="apply-local" class="control-btn">👁️ Apply Locally</button>
+            <button id="apply-global" class="control-btn global">🌍 Apply Globally</button>
+            <button id="save-html" class="control-btn global">💾 Save HTML</button>
+            <button id="reset-styles" class="control-btn reset">↩️ Reset Styles</button>
+        </div>
+    </div>
+
     <script src="/socket.io/socket.io.js"></script>
     <script src="script.js"></script>
+    <script>
+        // Tab switching functionality
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tab = btn.dataset.tab;
+                
+                // Update active tab button
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                // Update active tab content
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                    if (content.dataset.tab === tab) {
+                        content.classList.add('active');
+                    }
+                });
+            });
+        });
+
+        // Value display updates
+        document.querySelectorAll('input[type="range"]').forEach(slider => {
+            const updateDisplay = () => {
+                const display = slider.parentElement.querySelector('.value-display');
+                if (display) {
+                    let value = slider.value;
+                    let unit = '';
+                    
+                    switch(slider.id) {
+                        case 'font-size': unit = 'vw'; break;
+                        case 'text-shadow':
+                        case 'border-size':
+                        case 'border-radius':
+                        case 'box-shadow':
+                        case 'padding':
+                        case 'perspective': unit = 'px'; break;
+                        case 'rotation': unit = '°'; break;
+                        case 'scale': unit = 'x'; break;
+                        default: unit = '';
+                    }
+                    
+                    display.textContent = value + unit;
+                }
+            };
+            
+            slider.addEventListener('input', updateDisplay);
+            updateDisplay(); // Initial display
+        });
+
+        // Template apply buttons
+        document.querySelectorAll('.apply-template').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const template = btn.dataset.template;
+                if (currentPassword) {
+                    applyTemplate(template);
+                } else {
+                    alert('Password required for templates!');
+                }
+            });
+        });
+
+        // Advanced actions
+        document.getElementById('reset-all').addEventListener('click', () => {
+            resetToNormal();
+        });
+
+        document.getElementById('copy-html').addEventListener('click', () => {
+            const html = customHtmlContent?.html || displayText.outerHTML;
+            navigator.clipboard.writeText(html).then(() => {
+                showStyleIndicator('HTML Copied to Clipboard ✓');
+            });
+        });
+
+        document.getElementById('copy-css').addEventListener('click', () => {
+            const css = customHtmlContent?.css || '';
+            navigator.clipboard.writeText(css).then(() => {
+                showStyleIndicator('CSS Copied to Clipboard ✓');
+            });
+        });
+    </script>
 </body>
 </html> 

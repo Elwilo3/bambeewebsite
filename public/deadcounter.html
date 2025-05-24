@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dead Counter - Bambee Website</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Orbitron:wght@300;400;700&family=Courier+New&family=Arial&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="style-default deadcounter-page">
+    <div class="container">
+        <div class="deadcounter-display">
+            <div id="counter-label" class="counter-label">Deaths</div>
+            <div id="counter-number" class="counter-number">0</div>
+        </div>
+        
+        <!-- Edit Mode -->
+        <div id="edit-panel" class="edit-panel" style="display: none;">
+            <div class="edit-section">
+                <h4>Counter</h4>
+                <label>Label: <input type="text" id="label-input" placeholder="Deaths" maxlength="20"></label>
+                <label>Count: <input type="number" id="count-input" value="0"></label>
+            </div>
+            <div class="edit-actions">
+                <button id="save-counter" class="control-btn">Save</button>
+                <button id="cancel-edit" class="control-btn reset">Cancel</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="style-indicator" class="style-indicator">
+        Style: Default
+    </div>
+
+    <!-- Controls Panel (similar to main page) -->
+    <div id="controls-panel" class="controls-panel">
+        <div class="controls-header">
+            <h3>Counter Style Controls</h3>
+            <button id="close-controls" class="close-btn">×</button>
+        </div>
+        
+        <div class="controls-section">
+            <h4>Text</h4>
+            <label>Font Size: <input type="range" id="font-size" min="0.5" max="20" step="0.1" value="8"></label>
+            <label>Font Family: 
+                <select id="font-family">
+                    <option value="Roboto">Roboto</option>
+                    <option value="Orbitron">Orbitron</option>
+                    <option value="Courier New">Courier New</option>
+                    <option value="Arial">Arial</option>
+                    <option value="Brush Script MT">Brush Script MT</option>
+                </select>
+            </label>
+            <label>Text Color: <input type="color" id="text-color" value="#ffffff"></label>
+            <label>Font Weight: 
+                <select id="font-weight">
+                    <option value="300">Light</option>
+                    <option value="400">Normal</option>
+                    <option value="500">Medium</option>
+                    <option value="700">Bold</option>
+                </select>
+            </label>
+        </div>
+
+        <div class="controls-section">
+            <h4>Background</h4>
+            <label>Background Color: <input type="color" id="bg-color" value="#000000"></label>
+            <label>Opacity: <input type="range" id="bg-opacity" min="0" max="1" step="0.01" value="0.7"></label>
+            <label>Border Size: <input type="range" id="border-size" min="0" max="10" step="1" value="2"></label>
+            <label>Border Color: <input type="color" id="border-color" value="#ffffff"></label>
+            <label>Border Radius: <input type="range" id="border-radius" min="0" max="50" step="1" value="25"></label>
+        </div>
+
+        <div class="controls-actions">
+            <button id="apply-local" class="control-btn">Apply Locally</button>
+            <button id="apply-global" class="control-btn global">Apply Globally</button>
+            <button id="reset-styles" class="control-btn reset">Reset</button>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="deadcounter.js"></script>
+</body>
+</html> 
