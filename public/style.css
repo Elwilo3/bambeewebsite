@@ -276,4 +276,648 @@ body {
     .text-input {
         font-size: 1.4rem;
     }
+}
+
+/* Controls Panel */
+.controls-panel {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.95);
+    border: 2px solid #ffffff;
+    border-radius: 15px;
+    padding: 20px;
+    min-width: 500px;
+    max-width: 80vw;
+    max-height: 85vh;
+    overflow-y: auto;
+    z-index: 2000;
+    display: none;
+    color: white;
+    font-family: 'Roboto', sans-serif;
+}
+
+.controls-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #333;
+    padding-bottom: 15px;
+}
+
+.controls-header h3 {
+    margin: 0;
+    color: #00ffff;
+    font-size: 18px;
+    text-shadow: 0 0 10px #00ffff;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.close-btn:hover {
+    color: #ff4444;
+    background: rgba(255, 68, 68, 0.1);
+}
+
+/* Tab Navigation */
+.tab-nav {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #333;
+}
+
+.tab-btn {
+    padding: 10px 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border: none;
+    color: #ccc;
+    cursor: pointer;
+    border-radius: 8px 8px 0 0;
+    font-size: 12px;
+    transition: all 0.3s ease;
+    font-family: 'Roboto', sans-serif;
+}
+
+.tab-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.tab-btn.active {
+    background: rgba(0, 255, 255, 0.1);
+    color: #00ffff;
+    border-bottom: 2px solid #00ffff;
+}
+
+/* Tab Content */
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.controls-section {
+    margin-bottom: 25px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.controls-section h4 {
+    color: #00ffff;
+    margin-bottom: 15px;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+    padding-bottom: 5px;
+}
+
+.controls-section label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 12px;
+    gap: 10px;
+}
+
+.controls-section input,
+.controls-section select,
+.controls-section textarea {
+    padding: 6px 8px;
+    border: 1px solid #333;
+    background: #222;
+    color: white;
+    border-radius: 4px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 11px;
+}
+
+.controls-section input:focus,
+.controls-section select:focus,
+.controls-section textarea:focus {
+    outline: none;
+    border-color: #00ffff;
+    box-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
+}
+
+.controls-section input[type="range"] {
+    width: 120px;
+    background: #333;
+}
+
+.controls-section input[type="color"] {
+    width: 50px;
+    height: 30px;
+    padding: 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.controls-section textarea {
+    width: 100%;
+    min-height: 100px;
+    resize: vertical;
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    line-height: 1.4;
+}
+
+.value-display {
+    color: #00ffff;
+    font-size: 11px;
+    min-width: 40px;
+    text-align: right;
+    font-weight: 500;
+}
+
+/* Template Grid */
+.template-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.template-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.template-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: #00ffff;
+    transform: translateY(-2px);
+}
+
+.template-card .template-preview {
+    background: #1a1a1a;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 10px;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.template-card h5 {
+    color: #00ffff;
+    margin-bottom: 5px;
+    font-size: 13px;
+}
+
+.template-card p {
+    color: #ccc;
+    font-size: 11px;
+    margin-bottom: 10px;
+    line-height: 1.3;
+}
+
+.apply-template {
+    background: rgba(0, 255, 255, 0.1);
+    border: 1px solid #00ffff;
+    color: #00ffff;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 11px;
+    transition: all 0.3s ease;
+}
+
+.apply-template:hover {
+    background: rgba(0, 255, 255, 0.2);
+    transform: scale(1.05);
+}
+
+/* File Controls */
+.file-controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.file-controls label {
+    cursor: pointer;
+}
+
+/* Editor Help */
+.editor-help {
+    margin-top: 8px;
+    padding: 8px;
+    background: rgba(0, 255, 255, 0.05);
+    border-left: 3px solid #00ffff;
+    border-radius: 0 4px 4px 0;
+}
+
+.editor-help small {
+    color: #00ffff;
+    font-size: 10px;
+}
+
+/* Control Actions */
+.controls-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    border-top: 2px solid #333;
+    padding-top: 20px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.control-btn {
+    padding: 10px 16px;
+    border: 1px solid #00ffff;
+    background: rgba(0, 255, 255, 0.1);
+    color: #00ffff;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.3s ease;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.control-btn:hover {
+    background: rgba(0, 255, 255, 0.2);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 255, 255, 0.2);
+}
+
+.control-btn.global {
+    border-color: #ff6600;
+    color: #ff6600;
+    background: rgba(255, 102, 0, 0.1);
+}
+
+.control-btn.global:hover {
+    background: rgba(255, 102, 0, 0.2);
+    box-shadow: 0 4px 8px rgba(255, 102, 0, 0.2);
+}
+
+.control-btn.reset {
+    border-color: #ff4444;
+    color: #ff4444;
+    background: rgba(255, 68, 68, 0.1);
+}
+
+.control-btn.reset:hover {
+    background: rgba(255, 68, 68, 0.2);
+    box-shadow: 0 4px 8px rgba(255, 68, 68, 0.2);
+}
+
+/* Custom animations */
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
+@keyframes fade {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+.text-display.pulse { animation: pulse 2s infinite; }
+.text-display.bounce { animation: bounce 2s infinite; }
+.text-display.fade { animation: fade 3s infinite; }
+.text-display.shake { animation: shake 0.5s infinite; }
+
+/* Custom styles override */
+.custom-styles .text-display {
+    transition: all 0.3s ease !important;
+}
+
+/* HTML Mode specific */
+.html-mode .text-display {
+    white-space: normal !important;
+    word-wrap: break-word !important;
+}
+
+/* Responsive design for controls */
+@media (max-width: 768px) {
+    .controls-panel {
+        min-width: 90vw;
+        max-width: 95vw;
+        padding: 15px;
+    }
+    
+    .template-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .controls-actions {
+        flex-direction: column;
+    }
+    
+    .tab-nav {
+        flex-wrap: wrap;
+    }
+    
+    .tab-btn {
+        flex: 1;
+        min-width: 80px;
+    }
+}
+
+/* Scrollbar styling for webkit browsers */
+.controls-panel::-webkit-scrollbar {
+    width: 8px;
+}
+
+.controls-panel::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+.controls-panel::-webkit-scrollbar-thumb {
+    background: rgba(0, 255, 255, 0.3);
+    border-radius: 4px;
+}
+
+.controls-panel::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 255, 255, 0.5);
+}
+
+/* Local style indicator */
+.local-style-indicator {
+    position: fixed;
+    top: 60px;
+    right: 20px;
+    background-color: rgba(255, 165, 0, 0.9);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 15px;
+    font-size: 12px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1001;
+    border: 1px solid rgba(255, 165, 0, 0.5);
+    backdrop-filter: blur(5px);
+}
+
+.local-style-indicator.show {
+    opacity: 1;
+}
+
+/* Loading states */
+.loading {
+    position: relative;
+    overflow: hidden;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.2), transparent);
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+/* Dead Counter Specific Styles */
+.deadcounter-page .container {
+    flex-direction: column;
+    gap: 20px;
+}
+
+.deadcounter-display {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.counter-label {
+    font-size: clamp(1rem, 4vw, 6rem);
+    font-weight: 300;
+    opacity: 0.8;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.counter-number {
+    font-size: clamp(3rem, 15vw, 25rem);
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
+    line-height: 1;
+}
+
+/* Apply styles to counter elements */
+.style-default .counter-label,
+.style-default .counter-number {
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
+}
+
+.style-neon .counter-label,
+.style-neon .counter-number {
+    color: #00ffff;
+    text-shadow: 
+        0 0 10px #00ffff,
+        0 0 20px #00ffff,
+        0 0 30px #00ffff;
+}
+
+.style-retro .counter-label,
+.style-retro .counter-number {
+    color: #ffffff;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    text-shadow: 3px 3px 0px #000000;
+}
+
+.style-minimal .counter-label,
+.style-minimal .counter-number {
+    color: #ffffff;
+    font-weight: 300;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.style-gaming .counter-label,
+.style-gaming .counter-number {
+    color: #ffffff;
+    font-weight: bold;
+    text-shadow: 
+        0 0 5px #ff0000,
+        0 0 10px #00ff00,
+        0 0 15px #0000ff;
+}
+
+.style-corporate .counter-label,
+.style-corporate .counter-number {
+    color: #2c3e50;
+    font-family: 'Arial', sans-serif;
+    font-weight: 500;
+    text-shadow: none;
+}
+
+.style-handwriting .counter-label,
+.style-handwriting .counter-number {
+    color: #2c1810;
+    font-family: 'Brush Script MT', cursive;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.style-futuristic .counter-label,
+.style-futuristic .counter-number {
+    color: #00ffff;
+    font-family: 'Orbitron', monospace;
+    font-weight: 300;
+    text-shadow: 0 0 10px #00ffff;
+}
+
+/* Edit Panel */
+.edit-panel {
+    background: rgba(0, 0, 0, 0.9);
+    border: 2px solid #ffffff;
+    border-radius: 15px;
+    padding: 20px;
+    color: white;
+    font-family: 'Roboto', sans-serif;
+    min-width: 300px;
+}
+
+.edit-section {
+    margin-bottom: 20px;
+}
+
+.edit-section h4 {
+    color: #00ffff;
+    margin-bottom: 10px;
+    font-size: 14px;
+    text-transform: uppercase;
+}
+
+.edit-section label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.edit-section input {
+    margin-left: 10px;
+    padding: 6px;
+    border: 1px solid #333;
+    background: #222;
+    color: white;
+    border-radius: 4px;
+    min-width: 100px;
+}
+
+.edit-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+/* Counter background styling */
+.deadcounter-display {
+    background-color: rgba(0, 0, 0, 0.7);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-radius: clamp(8px, 2vw, 25px);
+    padding: clamp(20px, 4vw, 60px);
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+}
+
+/* Style applications for counter background */
+.style-neon .deadcounter-display {
+    background-color: rgba(0, 0, 0, 0.8);
+    border: 3px solid #00ffff;
+    box-shadow: 
+        0 0 20px #00ffff,
+        inset 0 0 20px rgba(0, 255, 255, 0.1);
+}
+
+.style-retro .deadcounter-display {
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #f9ca24);
+    background-size: 400% 400%;
+    animation: retroGradient 3s ease infinite;
+    border: 4px solid #ffffff;
+}
+
+.style-minimal .deadcounter-display {
+    background-color: transparent;
+    border: none;
+}
+
+.style-gaming .deadcounter-display {
+    background-color: rgba(0, 0, 0, 0.8);
+    border: 4px solid;
+    border-image: linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3) 1;
+    animation: rgbBorder 2s linear infinite;
+}
+
+.style-corporate .deadcounter-display {
+    background-color: rgba(255, 255, 255, 0.95);
+    border: 2px solid #2c3e50;
+}
+
+.style-handwriting .deadcounter-display {
+    background-color: rgba(255, 248, 220, 0.9);
+    border: 3px solid #8b4513;
+    transform: rotate(-1deg);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.style-futuristic .deadcounter-display {
+    background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(255, 0, 255, 0.1));
+    border: 2px solid #00ffff;
+    box-shadow: 
+        0 0 30px rgba(0, 255, 255, 0.3),
+        inset 0 0 30px rgba(255, 0, 255, 0.1);
+    backdrop-filter: blur(10px);
+    animation: futuristicGlow 4s ease-in-out infinite alternate;
 } 
